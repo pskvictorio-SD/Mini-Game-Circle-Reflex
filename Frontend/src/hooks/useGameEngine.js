@@ -1,17 +1,27 @@
 import { useState, useEffect, useRef } from "react";
+import { useFetch } from "./useFetch.js";
 import { getTimeBonusByLevel } from "../utils/levelUpTime.js";
 import { getCirclesByLevel } from "../utils/getCirclesByLevel.js";
 
 export const useGameEngine = () => {
+  const { request, data, loading, error } = useFetch();
+
   const INITIAL_TIME = 30;
   const INITIAL_LIVES = 3;
+  const INITIAL_LEVEL = 1;
 
+  // Estados para manejar logica del juego
   const [isPlaying, setIsPlaying] = useState(false);
-  const [level, setLevel] = useState(1);
-  const [score, setScore] = useState(0);
-  const [lives, setLives] = useState(INITIAL_LIVES);
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
   const [circles, setCircles] = useState([]);
+
+  // Estados para manejar logica de juego y mandar al backend datos de la partida
+  const [level, setLevel] = useState(INITIAL_LEVEL);
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(INITIAL_LIVES);
+  const [duration, setDuration] = useState(0);
+  const [incorrectClicks, setIncorrectClicks] = useState(0);
+
   const containerRef = useRef(null);
 
   // Funcion para manejar los niveles
@@ -26,7 +36,7 @@ export const useGameEngine = () => {
   };
 
   // Funcion para generar los circulos asignandoles posiciones aleatorias
-  const generateCircles = () => {
+  function generateCircles() {
     // Funcion para generar una posicion aleatoria dentro del contenedor
     function getRandomPosition() {
       const container = containerRef.current;
@@ -107,9 +117,9 @@ export const useGameEngine = () => {
     }
 
     setCircles(newCircles);
-  };
+  }
 
-  // Funcion timer
+  // Funcion timeLeft
   useEffect(() => {
     if (!isPlaying) return;
 
@@ -127,20 +137,51 @@ export const useGameEngine = () => {
     return () => clearInterval(interval);
   }, [isPlaying]);
 
+  // Funcion duracion de la partida
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    const interval = setInterval(() => {
+      setDuration((prev) => {
+        return prev + 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isPlaying]);
+
+  // Terminar juego una vez que el jugador se haya quedado sin vidas
+  useEffect(() => {
+    if (lives <= 0 && isPlaying) {
+      gameOver("¡Te has quedado sin vidas!");
+    }
+  }, [lives, isPlaying]);
+
   // Funcion para terminar el juego (Game Over)
   const gameOver = (message) => {
+    request("http://localhost:3000/api/scores", "POST", {
+      user_id: 1,
+      username: "player1",
+      score: score,
+      incorrect_clicks: incorrectClicks,
+      duration: duration,
+      level: level,
+    });
+
     setIsPlaying(false);
     setCircles([]);
     setTimeLeft(INITIAL_TIME);
+    setDuration(0);
+    setIncorrectClicks(0);
     setScore(0);
     setLives(INITIAL_LIVES);
-    setLevel(1);
+    setLevel(INITIAL_LEVEL);
     alert(message || "¡Game Over!");
   };
 
   // Mover circulos de forma aleatoria
   function moveCircleSlightly(circleEl, container) {
-    const maxOffset = Math.min(3 + level, 10) // 🔹 rango corto de movimiento
+    const maxOffset = Math.min(3 + level, 10); // 🔹 rango corto de movimiento
 
     // desplazamiento pequeño
     const dx = Math.random() * maxOffset * 2 - maxOffset;
@@ -203,16 +244,19 @@ export const useGameEngine = () => {
     if (type === "good") {
       setScore((prevScore) => prevScore + 10);
     } else if (type === "bad") {
+      setIncorrectClicks((prevClicks) => {
+        return prevClicks + 1;
+      });
       setLives((prevLives) => {
-        if (prevLives === 1) {
-          gameOver("¡Te has quedado sin vidas!");
-        }
         return prevLives - 1;
       });
     } else if (type === "time") {
       setTimeLeft((prevTime) => prevTime + 5);
     } else if (type === "kill") {
       // Circulo de instantKill
+      setIncorrectClicks((prevClicks) => {
+        return prevClicks + 1;
+      });
       gameOver("¡Has tocado un circulo mortal!");
     }
 
