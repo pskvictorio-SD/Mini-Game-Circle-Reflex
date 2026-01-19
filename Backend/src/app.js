@@ -17,7 +17,6 @@ app.use("/api/users", routerUsers)
 
 import routerScores from "./routes/scores.route.js"
 app.use("/api/scores", routerScores)
-app.use("/api/scores", routerScores)
 
 // Puerto
 const PORT = process.env.PORT || 3000

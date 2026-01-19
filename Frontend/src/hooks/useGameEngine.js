@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef } from "react";
+import { getTimeBonusByLevel } from "../utils/levelUpTime.js";
+import { getCirclesByLevel } from "../utils/getCirclesByLevel.js";
 
 export const useGameEngine = () => {
+  const INITIAL_TIME = 30;
+  const INITIAL_LIVES = 3;
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
-  const [lives, setLives] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [lives, setLives] = useState(INITIAL_LIVES);
+  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
   const [circles, setCircles] = useState([]);
   const containerRef = useRef(null);
 
@@ -14,15 +19,6 @@ export const useGameEngine = () => {
     setLevel((prevLevel) => prevLevel + 1);
 
     // Aumentar tiempo por nivel
-    const getTimeBonusByLevel = (level) => {
-      const baseBonus = 1; // tiempo mínimo que se suma
-      const incrementEvery = 5; // cada cuántos niveles aumenta
-      const incrementAmount = 2; // cuánto aumenta
-
-      const steps = Math.floor((level - 1) / incrementEvery);
-
-      return baseBonus + steps * incrementAmount;
-    };
     const timeBonus = getTimeBonusByLevel(level + 1);
     setTimeLeft((prevTime) => prevTime + timeBonus);
 
@@ -40,7 +36,6 @@ export const useGameEngine = () => {
 
       const maxX = container.clientWidth - circleSize;
       const maxY = container.clientHeight - circleSize;
-
       return {
         left: Math.random() * maxX,
         top: Math.random() * maxY,
@@ -48,22 +43,7 @@ export const useGameEngine = () => {
     }
 
     // Funcion para calcular cantidad de circulos que se crearan segun el nivel
-    const getCirclesByLevel = (level) => {
-      let generateCircleTime = false;
-      let generateCircleKill = false;
-
-      const good = 2 + level + Math.floor(Math.random() * 2); // +0..2
-      const bad = 3 + Math.floor(level / 2) + Math.floor(Math.random() * 3); // +0..1
-      const time = Math.random() < 0.2 ? 1 : 0; // 20% de probabilidad de 1 circulo de tiempo a partir del nivel 8
-      const kill = Math.random() < 0.3 ? 1 : 0; // 30% de probabilidad de 1 circulo instantKill a partir del nivel 15
-      if (level >= 15) {
-        return { good, bad, time, kill };
-      }
-      if (level >= 8) {
-        return { good, bad, time };
-      }
-      return { good, bad };
-    };
+    getCirclesByLevel(level);
 
     const newCircles = [];
 
@@ -151,16 +131,16 @@ export const useGameEngine = () => {
   const gameOver = (message) => {
     setIsPlaying(false);
     setCircles([]);
-    setTimeLeft(30);
+    setTimeLeft(INITIAL_TIME);
     setScore(0);
-    setLives(3);
+    setLives(INITIAL_LIVES);
     setLevel(1);
     alert(message || "¡Game Over!");
   };
 
   // Mover circulos de forma aleatoria
   function moveCircleSlightly(circleEl, container) {
-    const maxOffset = 5; // 🔹 rango corto de movimiento
+    const maxOffset = Math.min(3 + level, 10) // 🔹 rango corto de movimiento
 
     // desplazamiento pequeño
     const dx = Math.random() * maxOffset * 2 - maxOffset;
@@ -215,11 +195,9 @@ export const useGameEngine = () => {
     }
 
     // Eliminar el circulo clickeado
-    setTimeout(() => {
-      setCircles((prevCircles) =>
-        prevCircles.filter((circle) => circle.id !== e),
-      );
-    }, 200);
+    setCircles((prevCircles) =>
+      prevCircles.filter((circle) => circle.id !== e),
+    );
 
     // Actualizar el puntaje y game over
     if (type === "good") {
@@ -240,7 +218,6 @@ export const useGameEngine = () => {
 
     // Verificar si quedan circulos buenos para subir nivel
     if (circles.filter((circle) => circle.type === "good").length - 1 === 0) {
-      alert("¡Subes de nivel!");
       handleLevelUp();
     }
   };
