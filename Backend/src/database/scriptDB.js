@@ -25,13 +25,17 @@ const initQuery = `
     CREATE TABLE IF NOT EXISTS scores (
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT NOT NULL,
+        username VARCHAR (50) NOT NULL,
         score INT NOT NULL,
         incorrect_clicks INT NOT NULL,
         duration INT COMMENT 'Duración de la partida en segundos',
+        level INT NOT NULL,
         played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
     `;
+
+    console.log(process.env.DB_USER)
 
 conn.connect((err) => {
   if (err) {
