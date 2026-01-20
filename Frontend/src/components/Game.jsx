@@ -12,7 +12,7 @@ export const Game = () => {
     timeLeft,
     circles,
     containerRef,
-    isPlaying, // 👈 si lo exponés
+    isPlaying,
   } = useGameEngine();
 
   useEffect(() => {
