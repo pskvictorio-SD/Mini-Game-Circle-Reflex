@@ -6,13 +6,13 @@ El juego aumenta progresivamente su dificultad mediante niveles, movimiento din�
 
 🚀 Demo
 
-👉 (Agregar link cuando lo deployes — Vercel / Netlify / GitHub Pages)
+👉 (Link de deploye — Vercel / Netlify / GitHub Pages)
 
 🕹️ Gameplay
 
 🎯 Click en círculos buenos para sumar puntos
 
-💣 Evitá los círculos malos (pierden vidas)
+💣 Evitá los círculos malos (quitan vidas)
 
 ⏱️ Algunos círculos agregan tiempo extra
 
@@ -37,7 +37,7 @@ Dificultad escalable según el nivel
 Gestión de estado desacoplada de la interfaz
 
 🧩 Tipos de círculos
-Tipo	Efecto
+    Tipo Efecto
 🟢 Good	+10 puntos
 🔴 Bad	-1 vida
 ⏱️ Time	+5 segundos
@@ -58,15 +58,22 @@ Maneja toda la lógica del juego
 
 Estados:
 
-level
+Esta en juego
 
-score
+Cuenta regresiva
 
-lives
+Circulos
 
-timeLeft
+Nivel
 
-circles
+Puntaje
+
+Vidas
+
+Duracion
+
+Clicks incorrectos
+
 
 Controla:
 
@@ -96,17 +103,13 @@ Interactúa con el engine mediante funciones
 
 ⚛️ React
 
-🟨 JavaScript (ES6+)
+🟨 JavaScript
 
 🎨 CSS
 
 🧠 Custom Hooks
 
-🔁 useState, useEffect, useRef
-
 🎮 Manipulación directa del DOM para animaciones
-
-🧪 Decisiones técnicas destacadas
 
 ❌ No se usan estados para animaciones → mejor rendimiento
 
@@ -118,19 +121,14 @@ Interactúa con el engine mediante funciones
 
 ✅ Escalado de dificultad sin hardcodear valores fijos
 
-📈 Posibles mejoras futuras
-
 🏆 Guardar scores en backend (API REST)
+
+📈 Aun queda por hacer:
 
 🌍 Ranking global
 
 🔊 Sonidos y efectos
 
-📱 Versión mobile
-
-🎚️ Modo endless / hard
-
-🧠 IA básica para círculos evasivos
 
 👤 Autor
 
