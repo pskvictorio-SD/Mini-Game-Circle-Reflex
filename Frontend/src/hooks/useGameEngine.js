@@ -14,6 +14,7 @@ export const useGameEngine = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
   const [circles, setCircles] = useState([]);
+  
 
   // Estados para manejar logica de juego y mandar al backend datos de la partida
   const [level, setLevel] = useState(INITIAL_LEVEL);
@@ -119,36 +120,23 @@ export const useGameEngine = () => {
     setCircles(newCircles);
   }
 
-  // Funcion timeLeft
+  // Funcion timer
   useEffect(() => {
     if (!isPlaying) return;
 
     const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          gameOver("¡Se acabó el tiempo!");
-          return 0;
-        }
-        return prev - 1;
-      });
+      setTimeLeft((t) => Math.max(t - 1, 0));
+      setDuration((d) => d + 1);
     }, 1000);
 
     return () => clearInterval(interval);
   }, [isPlaying]);
-
-  // Funcion duracion de la partida
+  // Detectar cuando el tiempo termino para terminar el juego
   useEffect(() => {
-    if (!isPlaying) return;
-
-    const interval = setInterval(() => {
-      setDuration((prev) => {
-        return prev + 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isPlaying]);
+    if (isPlaying && timeLeft === 0) {
+      gameOver("¡Se acabó el tiempo!");
+    }
+  }, [timeLeft, isPlaying]);
 
   // Terminar juego una vez que el jugador se haya quedado sin vidas
   useEffect(() => {
@@ -232,6 +220,7 @@ export const useGameEngine = () => {
     // Comenzar el juego
     if (isPlaying === false) {
       setIsPlaying(true);
+      setTimeLeft(INITIAL_TIME);
       generateCircles();
     }
 
@@ -251,7 +240,7 @@ export const useGameEngine = () => {
         return prevLives - 1;
       });
     } else if (type === "time") {
-      setTimeLeft((prevTime) => prevTime + 5);
+      return setTimeLeft((prevTime) => prevTime + 5);
     } else if (type === "kill") {
       // Circulo de instantKill
       setIncorrectClicks((prevClicks) => {

@@ -71,3 +71,47 @@ body {
   cursor: pointer;
   z-index: 10;
 }
+
+.game_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.hud {
+  width: 100%;
+  max-width: 600px;
+  padding: 10px 14px;
+  background: #111;
+  color: white;
+  border-radius: 8px;
+}
+
+.hud_main {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1rem;
+}
+
+.hud_level {
+  text-align: center;
+  margin-top: 4px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.container_game {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.btn_start {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}

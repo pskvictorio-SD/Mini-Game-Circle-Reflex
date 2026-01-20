@@ -1,0 +1,97 @@
+.game_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.hud {
+  width: 100%;
+  max-width: 600px;
+  padding: 10px 14px;
+  background: #111;
+  color: white;
+  border-radius: 8px;
+}
+
+.hud_main {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1rem;
+}
+
+.hud_level {
+  text-align: center;
+  margin-top: 4px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.container_game {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.btn_start {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.game_over_overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+}
+
+.gameover_overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.gameover_card {
+  background: #111;
+  color: white;
+  padding: 30px 40px;
+  border-radius: 16px;
+  text-align: center;
+  min-width: 280px;
+  animation: popIn 0.3s ease;
+}
+
+.gameover_card h1 {
+  margin-bottom: 20px;
+}
+
+.gameover_stats p {
+  margin: 6px 0;
+  font-size: 1.1rem;
+}
+
+.btn_restart {
+  margin-top: 20px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

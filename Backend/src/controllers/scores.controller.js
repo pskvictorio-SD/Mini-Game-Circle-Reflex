@@ -49,13 +49,11 @@ export const createScores = (req, res) => {
         console.error("❌ Error al guardar la partida:", err);
         return res.status(500).json({
           ok: false,
-          message: "Error del servidor",
         });
       }
 
       return res.status(201).json({
         ok: true,
-        message: "Partida guardada con éxito",
         scoreId: result.insertId,
       });
     }

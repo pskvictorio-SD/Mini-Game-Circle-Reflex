@@ -1,5 +1,6 @@
-import { useGameEngine } from "../hooks/useGameEngine.js";
+import { useGameEngine } from "../hooks/useGameEngine";
 import { useEffect } from "react";
+import "./game.css"
 
 export const Game = () => {
   const {
@@ -11,6 +12,7 @@ export const Game = () => {
     timeLeft,
     circles,
     containerRef,
+    isPlaying, // 👈 si lo exponés
   } = useGameEngine();
 
   useEffect(() => {
@@ -18,36 +20,49 @@ export const Game = () => {
     if (!container) return;
 
     const interval = setInterval(() => {
-      const circles = container.querySelectorAll(".circle");
-      circles.forEach((circle) => moveCircleSlightly(circle, container));
-    }, 100);
+      const elements = container.querySelectorAll(".circle");
+      elements.forEach((circle) =>
+        moveCircleSlightly(circle, container)
+      );
+    }, 120);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div ref={containerRef} className="container_game">
-      <button onClick={controlGame}>Start</button>
-      <p>Tiempo: {timeLeft}s</p>
-      <p>Nivel: {level}</p>
-      <p>
-        Good Circles: {circles.filter((circle) => circle.type === "good").length}
-      </p>
-      <p>Lives: {lives}</p>
-      <p>Score: {score}</p>
+    <div className="game_wrapper">
+      
+      {/* HUD */}
+      <div className="hud">
+        <div className="hud_main">
+          <span>⏱ {timeLeft}s</span>
+          <span>❤️ {lives}</span>
+          <span>⭐ {score}</span>
+        </div>
+        <div className="hud_level">Nivel {level}</div>
+      </div>
 
-      {circles.map((circle) => (
-        <div
-          onFocus={() => controlGame(circle.id, circle.type)}
-          key={circle.id}
-          tabIndex={0}
-          className={`circle ${circle.className}`}
-          style={{
-            left: circle.x,
-            top: circle.y,
-          }}
-        />
-      ))}
+      {/* GAME AREA */}
+      <div ref={containerRef} className="container_game">
+        {circles.map((circle) => (
+          <div
+            key={circle.id}
+            onClick={() => controlGame(circle.id, circle.type)}
+            className={`circle ${circle.className}`}
+            style={{
+              left: circle.x,
+              top: circle.y,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* CONTROLES */}
+      {!isPlaying && (
+        <button className="btn_start" onClick={controlGame}>
+          ▶ Start
+        </button>
+      )}
     </div>
   );
 };
