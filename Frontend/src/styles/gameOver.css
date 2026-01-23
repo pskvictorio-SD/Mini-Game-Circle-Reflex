@@ -1,0 +1,92 @@
+/* Card Game Over */
+.gameover_card {
+  inset: 0;
+  margin: auto;
+  width: 320px;
+  max-width: 90%;
+  padding: 2rem 1.8rem;
+  border-radius: 16px;
+
+  background: rgba(20, 20, 20, 0.95);
+  box-shadow:
+    0 0 30px rgba(255, 0, 0, 0.25),
+    0 0 80px rgba(255, 0, 0, 0.15);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+
+  animation: gameover-pop 0.45s ease-out forwards;
+}
+
+/* Título */
+.gameover_card h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ff3b3b;
+  text-shadow: 0 0 12px rgba(255, 59, 59, 0.6);
+}
+
+/* Texto info */
+.gameover_card p {
+  color: #e0e0e0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Botón Restart */
+.btn_restart {
+  margin-top: 1rem;
+  padding: 0.75rem 1.8rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+
+  color: #111;
+  background: linear-gradient(135deg, #ff3b3b, #ff6a6a);
+  box-shadow:
+    0 4px 20px rgba(255, 59, 59, 0.5),
+    inset 0 0 0 rgba(255, 255, 255, 0.3);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn_restart:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 30px rgba(255, 59, 59, 0.7);
+}
+
+.btn_restart:active {
+  transform: scale(0.98);
+}
+
+/* Animación entrada */
+@keyframes gameover-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.gameover_card h1 {
+  animation: flicker 1.5s infinite alternate;
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.85;
+  }
+}

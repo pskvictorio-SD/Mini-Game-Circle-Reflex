@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { useFetch } from "./useFetch.js";
 import { getTimeBonusByLevel } from "../utils/levelUpTime.js";
 import { getCirclesByLevel } from "../utils/getCirclesByLevel.js";
+import goodCircleSound from "../assets/goodCircleSound.mp3";
+import badCircleSound from "../assets/badCircleSound.mp3";
+import instantKillSound from "../assets/instantKillSound.mp3";
 
 export const useGameEngine = () => {
   const { request, data, loading, error } = useFetch();
@@ -14,7 +17,7 @@ export const useGameEngine = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
   const [circles, setCircles] = useState([]);
-  
+  const [isGameOver, setIsGameOver] = useState(false);
 
   // Estados para manejar logica de juego y mandar al backend datos de la partida
   const [level, setLevel] = useState(INITIAL_LEVEL);
@@ -146,7 +149,9 @@ export const useGameEngine = () => {
   }, [lives, isPlaying]);
 
   // Funcion para terminar el juego (Game Over)
-  const gameOver = (message) => {
+  const gameOver = () => {
+    setIsGameOver(true);
+
     request("http://localhost:3000/api/scores", "POST", {
       user_id: 1,
       username: "player1",
@@ -155,16 +160,6 @@ export const useGameEngine = () => {
       duration: duration,
       level: level,
     });
-
-    setIsPlaying(false);
-    setCircles([]);
-    setTimeLeft(INITIAL_TIME);
-    setDuration(0);
-    setIncorrectClicks(0);
-    setScore(0);
-    setLives(INITIAL_LIVES);
-    setLevel(INITIAL_LEVEL);
-    alert(message || "¡Game Over!");
   };
 
   // Mover circulos de forma aleatoria
@@ -220,6 +215,7 @@ export const useGameEngine = () => {
     // Comenzar el juego
     if (isPlaying === false) {
       setIsPlaying(true);
+      setIsGameOver(false);
       setTimeLeft(INITIAL_TIME);
       generateCircles();
     }
@@ -231,8 +227,12 @@ export const useGameEngine = () => {
 
     // Actualizar el puntaje y game over
     if (type === "good") {
+      new Audio(goodCircleSound).play();
+
       setScore((prevScore) => prevScore + 10);
     } else if (type === "bad") {
+      new Audio(badCircleSound).play();
+
       setIncorrectClicks((prevClicks) => {
         return prevClicks + 1;
       });
@@ -243,6 +243,8 @@ export const useGameEngine = () => {
       return setTimeLeft((prevTime) => prevTime + 5);
     } else if (type === "kill") {
       // Circulo de instantKill
+      new Audio(instantKillSound).play();
+
       setIncorrectClicks((prevClicks) => {
         return prevClicks + 1;
       });
@@ -255,9 +257,23 @@ export const useGameEngine = () => {
     }
   };
 
+  // Funcion para reiniciar valores del juego (Usado para volver a jugar en pantalla de Game Over
+  const resetGame = () => {
+    setIsGameOver(false);
+    setIsPlaying(false);
+    setCircles([]);
+    setTimeLeft(INITIAL_TIME);
+    setDuration(0);
+    setIncorrectClicks(0);
+    setScore(0);
+    setLives(INITIAL_LIVES);
+    setLevel(INITIAL_LEVEL);
+  };
   return {
     controlGame,
     moveCircleSlightly,
+    resetGame,
+    isGameOver,
     level,
     score,
     lives,
