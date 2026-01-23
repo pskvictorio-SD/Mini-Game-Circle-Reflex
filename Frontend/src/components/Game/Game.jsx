@@ -1,6 +1,7 @@
-import { useGameEngine } from "../hooks/useGameEngine";
+import { useGameEngine } from "../../hooks/useGameEngine";
 import { GameOver } from "./GameOver";
 import { Interfaze } from "./GameHUD";
+import "../../styles/game.css"
 
 export const Game = () => {
   const game = useGameEngine();

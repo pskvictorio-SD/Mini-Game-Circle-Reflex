@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import "../styles/gameHUD.css"
 
 export const Interfaze = ({
   controlGame,
