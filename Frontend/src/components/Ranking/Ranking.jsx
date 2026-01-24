@@ -14,10 +14,6 @@ export const Ranking = () => {
 
   const scores = data?.data || []
 
-  if (scores.length === 0) {
-    return <p className="ranking_empty">No hay puntajes aún 😢</p>;
-  }
-
   return (
     <div className="ranking_card">
       <h2 className="ranking_title">🏆 Ranking</h2>
