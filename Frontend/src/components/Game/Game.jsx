@@ -3,7 +3,7 @@ import { GameOver } from "./GameOver";
 import { Interfaze } from "./GameHUD";
 import "../../styles/game.css"
 
-export const Game = () => {
+ const Game = () => {
   const game = useGameEngine();
 
   return (
@@ -20,3 +20,5 @@ export const Game = () => {
     </div>
   );
 };
+
+export default Game;

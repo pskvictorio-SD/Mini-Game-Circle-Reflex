@@ -19,43 +19,24 @@ export const getScores = (req, res) => {
   });
 };
 // POST /api/scores
-export const createScores = (req, res) => {
-  const { user_id, username, score, incorrect_clicks, duration, level } = req.body;
-  if (
-    user_id == null ||
-    !username ||
-    score == null ||
-    incorrect_clicks == null ||
-    duration == null ||
-    level == null
-  ) {
-    return res.status(400).json({
-      ok: false,
-      message: "No se ha podido guardar la partida por falta de datos",
-    });
-  }
+export const createScore = (req, res) => {
+  const { score, duration, incorrectClicks,level } = req.body;
+  const { id, username } = req.user;
 
   const query = `
-    INSERT INTO scores 
-    (user_id, username, score, incorrect_clicks, duration, level)
+    INSERT INTO scores (user_id, username, score, duration, incorrect_clicks, level)
     VALUES (?, ?, ?, ?, ?, ?)
   `;
 
   conn.query(
     query,
-    [user_id, username, score, incorrect_clicks, duration, level],
-    (err, result) => {
+    [id, username, score, duration, incorrectClicks,level],
+    (err) => {
       if (err) {
-        console.error("❌ Error al guardar la partida:", err);
-        return res.status(500).json({
-          ok: false,
-        });
+        console.error(err);
+        return res.status(500).json({ message: "Error al guardar score" });
       }
-
-      return res.status(201).json({
-        ok: true,
-        scoreId: result.insertId,
-      });
+      res.status(201).json({ ok: true });
     }
   );
 };

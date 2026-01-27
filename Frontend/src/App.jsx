@@ -1,13 +1,18 @@
+import { Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "./utils/protectedRoute.jsx";
+
+import Game from "./components/Game/Game.jsx";
+import Account from "./components/Account/Account.jsx";
 import "./main.css";
-import { Game } from "./components/Game/Game.jsx";
-import { Account } from "./components/Account/Account.jsx";
 
 function App() {
   return (
-    <>
-      {/* <Game></Game> */}
-      <Account></Account>
-    </>
+    <Routes>
+      <Route path="/" element={<Account />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/game" element={<Game />} />
+      </Route>
+    </Routes>
   );
 }
 

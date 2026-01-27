@@ -1,11 +1,11 @@
 import { conn } from "../database/db.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 // Obtener todos los usuarios
 export const getUsers = (req, res) => {
   const query = `
-      SELECT *
-      FROM users
+      SELECT id, username, email, created_at FROM users
     `;
 
   conn.query(query, (err, results) => {
@@ -76,22 +76,23 @@ export const createUser = (req, res) => {
           // En caso de que el usuario no exista, lo guarda en la base de datos
           const query =
             "INSERT INTO users (username, email, password_hash) VALUES (?,?,?)";
-          conn.query(
-            query,
-            [username, email, password_hash],
-            (err, results) => {
-              if (err) {
-                console.error("❌ Error al crear usuario:", err);
-                return res.status(500).json({
-                  ok: false,
-                  message: "Error del servidor",
-                });
-              }
-              res.status(200).json({
-                ok: true
+          conn.query(query, [username, email, password_hash], (err, result) => {
+            if (err) {
+              console.error("❌ Error al crear usuario:", err);
+              return res.status(500).json({
+                ok: false,
+                message: "Error del servidor",
               });
-            },
-          );
+            }
+            const id = result.insertId;
+            const token = jwt.sign({ id, username, email }, "secret", {
+              expiresIn: "1min",
+            });
+            res.status(200).json({
+              ok: true,
+              token,
+            });
+          });
         }
       });
     }
@@ -119,43 +120,42 @@ export const getUserById = (req, res) => {
 
     res.status(200).json({
       ok: true,
-      data: results,
+      data: results[0],
     });
   });
 };
 
 // Obtener usuario por username y contraseña
-export const getUserByUsername = (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+// export const getUserByUsername = (req, res) => {
+//   const username = req.body.username;
+//   const password = req.body.password;
 
-  const query = `
-      SELECT *
-      FROM users
-      WHERE username = ?
-      AND password_hash = ?
-    `;
+//   const query = `
+//       SELECT *
+//       FROM users
+//       WHERE username = ?
+//       AND password_hash = ?
+//     `;
 
-  conn.query(query, [username, password], (err, results) => {
-    if (err) {
-      console.error("❌ Error al obtener usuario:", err);
-      return res.status(500).json({
-        ok: false,
-        message: "Error del servidor",
-      });
-    }
+//   conn.query(query, [username, password], (err, results) => {
+//     if (err) {
+//       console.error("❌ Error al obtener usuario:", err);
+//       return res.status(500).json({
+//         ok: false,
+//         message: "Error del servidor",
+//       });
+//     }
 
-    res.status(200).json({
-      ok: true,
-      data: results,
-    });
-  });
-};
+//     res.status(200).json({
+//       ok: true,
+//       data: results,
+//     });
+//   });
+// };
 
 // Obtener usuario por email y contraseña
 export const getUserByEmail = (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  const { email, password } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({
@@ -164,8 +164,9 @@ export const getUserByEmail = (req, res) => {
     });
   }
 
-  // Conseguir contraseña encriptada
-  const query = "SELECT password_hash FROM users WHERE email = ?";
+  const query =
+    "SELECT id, username, email, password_hash FROM users WHERE email = ?";
+
   conn.query(query, [email], (err, results) => {
     if (err) {
       console.error("❌ Error al obtener usuario:", err);
@@ -174,29 +175,32 @@ export const getUserByEmail = (req, res) => {
         message: "Error del servidor",
       });
     }
-    // Comprobar si la contraseña es correcta
-    // Si la contraseña es correcta, devolver datos del usuario
-    if (bcrypt.compareSync(password, results[0].password_hash)) {
-      const query = "SELECT * FROM users WHERE email = ?";
-      conn.query(query, [email], (err, results) => {
-        if (err) {
-          console.error("❌ Error al obtener usuario:", err);
-          return res.status(500).json({
-            ok: false,
-            message: "Error del servidor",
-          });
-        }
-        res.status(200).json({
-          ok: true
-        });
+
+    if (results.length === 0) {
+      return res.status(400).json({
+        ok: false,
+        message: "Usuario no encontrado",
       });
     }
-    // Si la contraseña es incorrecta, devolver error
-    else {
+
+    const user = results[0];
+
+    if (!bcrypt.compareSync(password, user.password_hash)) {
       return res.status(400).json({
         ok: false,
         message: "Contraseña incorrecta",
       });
     }
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.status(200).json({
+      ok: true,
+      token,
+    });
   });
 };

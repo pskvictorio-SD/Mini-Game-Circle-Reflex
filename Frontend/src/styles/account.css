@@ -122,3 +122,15 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.error {
+  color: #ff3860;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-size: 0.8rem;  
+}

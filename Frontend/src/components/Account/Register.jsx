@@ -1,20 +1,72 @@
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import { useFetch } from "../../hooks/useFetch";
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
   const { request, data, loading, error } = useFetch();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [inputError, setInputError] = useState(null);
+  const navigate = useNavigate();
 
+  // Validacion de campos
+  const validateForm = () => {
+    if (!username.trim() || !email.trim() || !password.trim()) {
+      setInputError("Todos los campos son obligatorios");
+      return false;
+    }
+
+    if (username.length < 6) {
+      setInputError("El nombre de usuario debe tener al menos 6 caracteres");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setInputError("Email inválido");
+      return false;
+    }
+
+    if (password.length < 6) {
+      setInputError("La contraseña debe tener al menos 6 caracteres");
+      return false;
+    }
+
+    setInputError(null);
+    return true;
+  };
+
+  // Mostrar error en tiempo real
+  useEffect(() => {
+    if (inputError) validateForm();
+  }, [username, email, password]);
+
+  // Enviar formulario al backend
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (!validateForm()) return;
+
     request("http://localhost:3000/api/users", "POST", {
       username,
       email,
       password,
     });
+
+    // Resetear formulario
+    setUsername("");
+    setEmail("");
+    setPassword("");
   }
+
+  // Guardar token en localStorage
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem("token", data.token);
+      navigate("/game");
+    }
+  }, [data]);
 
   return (
     <div className="register_card">
@@ -38,6 +90,9 @@ export const Register = () => {
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
+
+        {inputError && <p className="error">{inputError}</p>}
+
         <button type="submit">Crear cuenta</button>
       </form>
     </div>

@@ -152,13 +152,18 @@ export const useGameEngine = () => {
   const gameOver = () => {
     setIsGameOver(true);
 
-    request("http://localhost:3000/api/scores", "POST", {
-      user_id: 1,
-      username: "player1",
-      score: score,
-      incorrect_clicks: incorrectClicks,
-      duration: duration,
-      level: level,
+    fetch("http://localhost:3000/api/scores", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        score,
+        duration,
+        incorrectClicks,
+        level
+      }),
     });
   };
 
