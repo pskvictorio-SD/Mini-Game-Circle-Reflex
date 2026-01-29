@@ -49,7 +49,7 @@ export const Interfaze = ({
 
       {!isPlaying && (
         <button className="btn_start" onClick={controlGame}>
-          ▶ Start
+          ▶ Jugar
         </button>
       )}
     </>

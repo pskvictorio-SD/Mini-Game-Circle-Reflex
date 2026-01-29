@@ -1,11 +1,9 @@
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
-import bcrypt from "bcryptjs"
 
 // Configuración de entorno
 dotenv.config()
-
 const app = express()
 
 // Middlewares

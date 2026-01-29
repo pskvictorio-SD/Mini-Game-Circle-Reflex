@@ -27,9 +27,6 @@ export function useFetch() {
       }
 
       setData(result);
-      if (result.message) {
-        alert(result.message);
-      }
       return result;
     } catch (error) {
       setError(error);

@@ -1,75 +1,56 @@
-/* Fondo general (opcional) */
+/* ===== BASE ===== */
 body {
   min-height: 100vh;
   background: radial-gradient(circle at top, #1e293b, #020617);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 .account_card {
   width: 50dvw;
   height: 100dvh;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  gap: 2rem;
 }
 
-/* Formulario */
+/* ===== FORM ===== */
 form {
-  padding: 2rem;
-  height: 400px;
   width: 100%;
   max-width: 380px;
-  border-radius: 14px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  height: 400px;
+  padding: 2rem;
   display: flex;
+  justify-content: center;
   flex-direction: column;
-  justify-content: space-around;
   gap: 1rem;
-}
-.login_card {
-  text-align: center;
-}
-.login_card h1 {
-  margin-bottom: 1rem;
-  color: #949699;
-}
-.register_card {
-  text-align: center;
-}
-.register_card h1 {
-  margin-bottom: 1rem;
-  color: #949699;
+  border-radius: 14px;
 }
 
-/* Título */
-form h1,
-form h2 {
-  color: #949699;
+h1,
+h2 {
+  color: #e5e7eb;
   text-align: center;
-  margin-bottom: 0.5rem;
 }
 
-/* Labels */
-label {
-  color: #cbd5f5;
+p {
   font-size: 0.9rem;
+  color: #94a3b8;
+  text-align: center;
 }
 
-/* Inputs */
+/* ===== INPUTS ===== */
 input {
   background: #020617;
   border: 1px solid #334155;
   border-radius: 10px;
   padding: 0.7rem 0.9rem;
   color: #e5e7eb;
-  font-size: 1rem;
-  outline: none;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   transition:
-    border 0.2s ease,
-    box-shadow 0.2s ease;
+    border 0.2s,
+    box-shadow 0.2s;
 }
 
 input::placeholder {
@@ -77,24 +58,24 @@ input::placeholder {
 }
 
 input:focus {
+  outline: none;
   border-color: #38bdf8;
   box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
 }
 
-/* Botón */
+/* ===== BUTTON ===== */
 button {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   padding: 0.75rem;
   border-radius: 10px;
   border: none;
   background: linear-gradient(135deg, #38bdf8, #0ea5e9);
   color: #020617;
-  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+    transform 0.15s,
+    box-shadow 0.15s;
 }
 
 button:hover {
@@ -102,35 +83,142 @@ button:hover {
   box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
 }
 
-button:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-/* Mensajes */
-p {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #94a3b8;
-}
-
-a {
-  color: #38bdf8;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
+/* ===== ERROR ===== */
 .error {
   color: #ff3860;
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
-  text-align: center;
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
   font-weight: 600;
-  font-size: 0.8rem;  
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ===== AUTH LAYOUT ===== */
+.login_component,
+.register_component {
+  width: 100%;
+  max-width: 900px;
+  min-height: 480px;
+  display: flex;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #334155;
+  background: #020617;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+.login_card,
+.register_card {
+  flex: 1;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== CALL PANELS ===== */
+.login_call,
+.register_call {
+  flex: 1;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+
+  background-color: #fff;
+}
+
+.login_call {
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  border-right: 1px solid #334155;
+}
+
+.register_call {
+  background: radial-gradient(circle at top right, #1e293b, #020617);
+  border-left: 1px solid #334155;
+}
+
+.login_call button,
+.register_call button {
+  background: transparent;
+  border: 2px solid #38bdf8;
+  color: #38bdf8;
+  border-radius: 999px;
+  padding: 0.7rem 1.8rem;
+}
+
+.login_call button:hover,
+.register_call button:hover {
+  background: #38bdf8;
+  color: #020617;
+}
+
+/* ===== ANIMATION ===== */
+.auth_transition {
+  animation-duration: 0.45s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-in-right {
+  animation: slideInRight 0.45s both;
+}
+.slide-in-left {
+  animation: slideInLeft 0.45s both;
+}
+.slide-out-right {
+  animation: slideOutRight 0.45s both;
+}
+.slide-out-left {
+  animation: slideOutLeft 0.45s both;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideOutRight {
+  to {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+@keyframes slideOutLeft {
+  to {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .login_component,
+  .register_component {
+    flex-direction: column;
+    max-width: 420px;
+  }
+
+  .login_call,
+  .register_call {
+    align-items: center;
+    text-align: center;
+    border: none;
+  }
 }

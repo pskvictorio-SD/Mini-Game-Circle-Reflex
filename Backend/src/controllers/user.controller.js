@@ -85,9 +85,11 @@ export const createUser = (req, res) => {
               });
             }
             const id = result.insertId;
-            const token = jwt.sign({ id, username, email }, "secret", {
-              expiresIn: "1min",
-            });
+            const token = jwt.sign(
+              { id, username, email },
+              process.env.JWT_SECRET,
+              { expiresIn: "15m" },
+            );
             res.status(200).json({
               ok: true,
               token,
@@ -124,34 +126,6 @@ export const getUserById = (req, res) => {
     });
   });
 };
-
-// Obtener usuario por username y contraseña
-// export const getUserByUsername = (req, res) => {
-//   const username = req.body.username;
-//   const password = req.body.password;
-
-//   const query = `
-//       SELECT *
-//       FROM users
-//       WHERE username = ?
-//       AND password_hash = ?
-//     `;
-
-//   conn.query(query, [username, password], (err, results) => {
-//     if (err) {
-//       console.error("❌ Error al obtener usuario:", err);
-//       return res.status(500).json({
-//         ok: false,
-//         message: "Error del servidor",
-//       });
-//     }
-
-//     res.status(200).json({
-//       ok: true,
-//       data: results,
-//     });
-//   });
-// };
 
 // Obtener usuario por email y contraseña
 export const getUserByEmail = (req, res) => {
@@ -195,7 +169,7 @@ export const getUserByEmail = (req, res) => {
     const token = jwt.sign(
       { id: user.id, username: user.username, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "15m" },
     );
 
     res.status(200).json({

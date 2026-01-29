@@ -2,7 +2,7 @@ import { useState, useEffect, use } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 
-export const Register = () => {
+export const Register = ({ onRestart }) => {
   const { request, data, loading, error } = useFetch();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -60,6 +60,13 @@ export const Register = () => {
     setPassword("");
   }
 
+  // Mostrar mensaje de error
+  useEffect(() => {
+    if (error) {
+      alert(error.message);
+    }
+  }, [error]);
+
   // Guardar token en localStorage
   useEffect(() => {
     if (data) {
@@ -69,32 +76,42 @@ export const Register = () => {
   }, [data]);
 
   return (
-    <div className="register_card">
-      <h1>Crear cuenta</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          value={username}
-          placeholder="Nombre de usuario"
-          type="text"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          value={email}
-          placeholder="Email"
-          type="email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          value={password}
-          placeholder="Contraseña"
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+    <div className="register_component">
+      {/* Tarjeta de llamada a Iniciar sesión */}
+      <div className="login_call">
+        <h1>Bienvenido de nuevo</h1>
+        <p>Inicia sesión para continuar</p>
+        <button onClick={onRestart}>Iniciar sesión</button>
+      </div>
 
-        {inputError && <p className="error">{inputError}</p>}
+      {/* Formulario */}
+      <div className="register_card">
+        <h1>Crear cuenta</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            value={username}
+            placeholder="Nombre de usuario"
+            type="text"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            value={email}
+            placeholder="Email"
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            value={password}
+            placeholder="Contraseña"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <button type="submit">Crear cuenta</button>
-      </form>
+          {inputError && <p className="error">{inputError}</p>}
+
+          <button type="submit">Crear cuenta</button>
+        </form>
+      </div>
     </div>
   );
 };
