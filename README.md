@@ -1,143 +1,111 @@
-🎯 Circle Reflex Game
+🎯 Circle Click Game – Mini Game Full Stack
 
-Un minijuego de reflejos desarrollado con React y JavaScript puro, donde el jugador debe hacer click en círculos buenos evitando los peligrosos antes de que se acabe el tiempo.
+Un minijuego web interactivo donde el usuario debe hacer click sobre círculos correctos para sumar puntos, evitando los círculos incorrectos que finalizan la partida.
+El juego guarda el score en una base de datos, permite visualizar rankings y está desarrollado con una arquitectura full stack moderna.
 
-El juego aumenta progresivamente su dificultad mediante niveles, movimiento dinámico, gestión del tiempo y diferentes tipos de círculos.
+🚀 Demo en vivo
 
-🚀 Demo
+🎮 Frontend: https://minigame.netlify.app
 
-👉 (Link de deploye — Vercel / Netlify / GitHub Pages)
+🔌 Backend API: https://minigame-api.onrender.com
 
-🕹️ Gameplay
+⚠️ El backend está desplegado en un servicio gratuito, por lo que puede tardar unos segundos en activarse la primera vez.
 
-🎯 Click en círculos buenos para sumar puntos
+🧠 ¿De qué trata el juego?
 
-💣 Evitá los círculos malos (quitan vidas)
+Aparecen círculos de distintos colores en pantalla
 
-⏱️ Algunos círculos agregan tiempo extra
+Algunos suman puntos, otros terminan el juego
 
-☠️ Los círculos instant kill terminan la partida
+El jugador debe reaccionar rápido y elegir correctamente
 
-📈 Al eliminar todos los círculos buenos → subís de nivel
+Al finalizar la partida:
 
-🌀 Los círculos se mueven constantemente dentro del área de juego
+Se guarda el score en la base de datos
 
-🧠 Mecánicas principales
+Se puede ver un ranking de puntajes
 
-Sistema de niveles progresivos
-
-Timer global de la partida
-
-Vidas limitadas
-
-Movimiento continuo de los círculos sin provocar re-renders
-
-Dificultad escalable según el nivel
-
-Gestión de estado desacoplada de la interfaz
-
-🧩 Tipos de círculos
-    Tipo Efecto
-🟢 Good	+10 puntos
-🔴 Bad	-1 vida
-⏱️ Time	+5 segundos
-☠️ Kill	Game Over instantáneo
-🏗️ Arquitectura del proyecto
-src/
-├── hooks/
-│   └── useGameEngine.js   # Lógica completa del juego
-├── components/
-│   └── Game.jsx           # Renderizado y UI
-├── styles/
-│   └── game.css
-└── App.jsx
-
-🔹 useGameEngine
-
-Maneja toda la lógica del juego
-
-Estados:
-
-Esta en juego
-
-Cuenta regresiva
-
-Circulos
-
-Nivel
-
-Puntaje
-
-Vidas
-
-Duracion
-
-Clicks incorrectos
-
-
-Controla:
-
-Generación de círculos
-
-Subida de nivel
-
-Game Over
-
-Timer
-
-Reglas del juego
-
-🔹 Game.jsx
-
-Se encarga solo del render
-
-Muestra HUD (tiempo, vidas, score)
-
-Renderiza círculos
-
-Aplica animaciones
-
-Interactúa con el engine mediante funciones
-
-⚙️ Tecnologías utilizadas
+🛠️ Tecnologías utilizadas
+Frontend
 
 ⚛️ React
 
-🟨 JavaScript
+🎨 CSS / estilos personalizados
 
-🎨 CSS
+🌐 Fetch API
 
-🧠 Custom Hooks
+⚡ Vite
 
-🎮 Manipulación directa del DOM para animaciones
+Backend
 
-❌ No se usan estados para animaciones → mejor rendimiento
+🟢 Node.js
 
-✅ Movimiento gestionado con useRef + setInterval
+🚂 Express
 
-✅ Separación clara entre lógica y UI
+🔐 CORS
 
-✅ Uso de crypto.randomUUID() para IDs únicos
+🌍 API REST
 
-✅ Escalado de dificultad sin hardcodear valores fijos
+Base de datos
 
-🏆 Guardar scores en backend (API REST)
+🐬 MySQL
 
-📈 Aun queda por hacer:
+📊 Tabla de scores persistente
 
-🌍 Ranking global
+Deploy
 
-🔊 Sonidos y efectos
+☁️ Netlify (Frontend)
+
+☁️ Render (Backend)
+
+☁️ PlanetScale / MySQL Cloud (Base de datos)
 
 
-👤 Autor
 
-Victorio Paskevicius
-📍 Argentina
-🎓 Estudiante de programación
-💻 Frontend / Fullstack en formación
 
-📄 Licencia
+🧪 Funcionalidades implementadas
 
-Este proyecto se distribuye bajo licencia MIT.
-Uso libre para aprendizaje y demostración.
+✅ Lógica completa del juego
+
+✅ Manejo de estados y eventos
+
+✅ Comunicación frontend ↔ backend
+
+✅ Persistencia de datos
+
+✅ Ranking de scores
+
+✅ Deploy en la nube
+
+✅ Proyecto listo para portfolio
+
+🧠 Aprendizajes clave
+
+Arquitectura Full Stack real
+
+Creación y consumo de APIs REST
+
+Manejo de MySQL en producción
+
+Uso de variables de entorno
+
+Resolución de problemas CORS
+
+Deploy de aplicaciones modernas
+
+Preparación de proyectos para portfolio profesional
+
+📸 Capturas
+
+(Podés agregar screenshots del juego acá)
+
+📌 Estado del proyecto
+
+🟢 Completado
+El proyecto se encuentra funcional, desplegado y listo para ser mostrado como parte de un portfolio personal.
+
+🙌 Autor
+
+👨‍💻 Victorio Paskevicius
+Estudiante de programación y desarrollo web
+Apasionado por el desarrollo Full Stack y la creación de proyectos reales
