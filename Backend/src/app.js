@@ -9,11 +9,11 @@ const app = express()
 // Middlewares
 app.use(express.json())
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://circle-reflex-game.netlify.app"
-  ],
-  credentials: true
+  // origin: [
+  //   "http://localhost:5173",
+  //   "https://circle-reflex-game.netlify.app"
+  // ],
+  // credentials: true
 }));
 
 // Rutas
