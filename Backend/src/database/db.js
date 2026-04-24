@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const db = new Pool({
+const conn = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
@@ -14,7 +14,7 @@ const db = new Pool({
 
 const initDB = async () => {
   try {
-    await db.query(`
+    await conn.query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         username VARCHAR(50) NOT NULL UNIQUE,
@@ -23,7 +23,7 @@ const initDB = async () => {
       );
     `);
 
-    await db.query(`
+    await conn.query(`
       CREATE TABLE IF NOT EXISTS scores (
         id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL,
@@ -43,7 +43,7 @@ const initDB = async () => {
   }
 };
 
-db.query("SELECT NOW()", (err, res) => {
+conn.query("SELECT NOW()", (err, res) => {
   if (err) {
     console.error("Error conectando a la DB", err);
   } else {
@@ -51,4 +51,4 @@ db.query("SELECT NOW()", (err, res) => {
   }
 });
 
-export { db };
+export { conn };
