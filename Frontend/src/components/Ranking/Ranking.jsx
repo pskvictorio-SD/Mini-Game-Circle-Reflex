@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import "../../styles/ranking.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const Ranking = () => {
   const { request, data, loading, error } = useFetch();
 
   useEffect(() => {
-    request("http://localhost:3000/api/scores", "GET");
+    request(`${API_URL}/api/scores`, "GET");
   }, []);
 
   if (loading) return <p className="ranking_loading">Cargando ranking...</p>;

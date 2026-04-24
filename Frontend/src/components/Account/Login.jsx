@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
+
+console.log(API_URL)
 
 export const Login = ({ onRestart }) => {
   const { request, data, loading, error } = useFetch();
