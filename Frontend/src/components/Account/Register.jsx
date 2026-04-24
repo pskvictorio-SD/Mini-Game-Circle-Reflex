@@ -1,6 +1,7 @@
 import { useState, useEffect, use } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const Register = ({ onRestart }) => {
   const { request, data, loading, error } = useFetch();
@@ -48,9 +49,8 @@ export const Register = ({ onRestart }) => {
 
     if (!validateForm()) return;
 
-    request("http://localhost:3000/api/users", "POST", {
+    request(`${API_URL}/api/users/register`, "POST", {
       username,
-      email,
       password,
     });
 

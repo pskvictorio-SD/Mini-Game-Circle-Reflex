@@ -3,11 +3,9 @@ import { useFetch } from "../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 const API_URL = import.meta.env.VITE_API_URL;
 
-console.log(API_URL)
-
 export const Login = ({ onRestart }) => {
   const { request, data, loading, error } = useFetch();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [inputError, setInputError] = useState(null);
   const navigate = useNavigate();
@@ -19,11 +17,11 @@ export const Login = ({ onRestart }) => {
       return false;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setInputError("Email inválido");
-      return false;
-    }
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(email)) {
+    //   setInputError("Email inválido");
+    //   return false;
+    // }
 
     if (password.length < 6) {
       setInputError("La contraseña debe tener al menos 6 caracteres");
@@ -44,8 +42,8 @@ export const Login = ({ onRestart }) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    request("http://localhost:3000/api/users/login/email", "POST", {
-      email,
+    request(`${API_URL}/api/users/login`, "POST", {
+      username,
       password,
     });
   }
@@ -64,18 +62,17 @@ export const Login = ({ onRestart }) => {
       navigate("/game");
     }
   }, [data]);
-  
+
   return (
     <div className="login_component">
       <div className="login_card">
         <h1>Iniciar sesión</h1>
         <form onSubmit={handleSubmit}>
           <input
-            value={email}
-            type="email"
-            required
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            type="text"
+            placeholder="Nombre de usuario"
+            onChange={(e) => setUsername(e.target.value)}
           />
           <input
             value={password}

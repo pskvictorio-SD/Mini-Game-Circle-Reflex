@@ -5,7 +5,10 @@ import Game from "./components/Game/Game.jsx";
 import Account from "./components/Account/Account.jsx";
 import "./main.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function App() {
+  console.log("API:", import.meta.env.VITE_API_URL);
   return (
     <Routes>
       <Route path="/" element={<Account />} />
