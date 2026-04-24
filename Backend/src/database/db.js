@@ -10,7 +10,13 @@ const conn = new Pool({
   }
 });
 
-
+conn.query("SELECT NOW()", (err, res) => {
+  if (err) {
+    console.error("Error conectando a la DB", err);
+  } else {
+    console.log("DB conectada:", res.rows);
+  }
+});
 
 const initDB = async () => {
   try {
@@ -43,12 +49,6 @@ const initDB = async () => {
   }
 };
 
-conn.query("SELECT NOW()", (err, res) => {
-  if (err) {
-    console.error("Error conectando a la DB", err);
-  } else {
-    console.log("DB conectada:", res.rows);
-  }
-});
+initDB();
 
 export { conn };
